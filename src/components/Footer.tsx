@@ -41,6 +41,8 @@ export default function Footer() {
             <Link href="/">{t('navHome')}</Link>
             <Link href="/work">{t('navWork')}</Link>
             <Link href="/about">{t('navAbout')}</Link>
+            <Link href="/ai">{t('navAi')}</Link>
+            <Link href="/articles">{t('navArticles')}</Link>
             <Link href="/contact">{t('navContact')}</Link>
           </div>
 

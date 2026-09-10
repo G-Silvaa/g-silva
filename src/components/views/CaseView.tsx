@@ -29,6 +29,15 @@ export default function CaseView({ slug }: { slug: string }) {
           </h1>
           <div>
             <p className="lead">{tr(project.lead)}</p>
+
+            {project.role || project.org ? (
+              <p className="micro" style={{ marginTop: 18 }}>
+                {[project.role && tr(project.role), project.org && tr(project.org)]
+                  .filter(Boolean)
+                  .join(' — ')}
+              </p>
+            ) : null}
+
             <div style={{ display: 'flex', gap: 12, marginTop: 26, flexWrap: 'wrap' }}>
               {project.live ? (
                 <a className="btn btn--amber" href={project.live} target="_blank" rel="noreferrer noopener">
@@ -48,7 +57,9 @@ export default function CaseView({ slug }: { slug: string }) {
       </section>
 
       <section className="sec" style={{ paddingTop: 26 }}>
-        <span className="tab">{project.year}</span>
+        <span className="tab">
+          {project.org ? tr(project.org) : t('navWork')}
+        </span>
         <span className="corner" aria-hidden="true" />
 
         <div className="pad" style={{ paddingTop: 22 }}>
@@ -73,7 +84,7 @@ export default function CaseView({ slug }: { slug: string }) {
                 alignItems: 'start',
               }}
             >
-              <div>
+              <div hidden={project.stack.length === 0}>
                 <p className="micro" style={{ marginBottom: 12 }}>
                   {t('builtWith')}
                 </p>

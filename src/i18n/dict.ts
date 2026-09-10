@@ -5,6 +5,8 @@ export const ui = {
   navHome: { pt: 'Início', en: 'Welcome' },
   navWork: { pt: 'Projetos', en: 'Work' },
   navAbout: { pt: 'Sobre', en: 'About' },
+  navArticles: { pt: 'Artigos', en: 'Writing' },
+  navAi: { pt: 'IA', en: 'AI' },
   navContact: { pt: 'Contato', en: 'Contact' },
   menu: { pt: 'Menu', en: 'Menu' },
   close: { pt: 'Fechar', en: 'Close' },
@@ -70,7 +72,6 @@ export const ui = {
   copy: { pt: 'Copiar', en: 'Copy' },
   copied: { pt: 'Copiado', en: 'Copied' },
 
-  year: { pt: 'Ano', en: 'Year' },
   role2: { pt: 'Função', en: 'Role' },
   builtWith: { pt: 'Feito com', en: 'Built with' },
   backTop: { pt: 'Voltar ao topo', en: 'Back to top' },
@@ -108,6 +109,47 @@ export const ui = {
   },
   readProfile: { pt: 'Ler o perfil completo', en: 'Read the full profile' },
   aboutMe: { pt: 'Sobre mim', en: 'About me' },
+  dragToExplore: { pt: 'Arraste o plano — ou puxe um projeto', en: 'Drag the plane — or pull a project' },
+  tapToOpen: { pt: 'Toque para abrir', en: 'Tap to open' },
+  creativeSpace: { pt: 'Espaço aberto', en: 'Creative space' },
+  hi: { pt: 'Oi!', en: 'Hi!' },
+
+  /* Página de IA */
+  aiLoopTab: { pt: 'O ciclo', en: 'The loop' },
+  aiLoopA: { pt: 'Como isso entra', en: 'How it fits' },
+  aiLoopB: { pt: 'no meu dia.', en: 'into my day.' },
+  aiLoopLead: {
+    pt: 'Quatro regras que eu sigo — as duas primeiras ganham tempo e qualidade, as duas últimas garantem que nada suba sem alguém responder por aquilo.',
+    en: 'Four rules I follow — the first two buy time and quality, the last two make sure nothing ships without someone answering for it.',
+  },
+  aiBuiltTab: { pt: 'Feito assim', en: 'Built this way' },
+  aiBuiltA: { pt: 'Construído assim,', en: 'Built this way,' },
+  aiBuiltB: { pt: 'e no ar.', en: 'and running.' },
+  aiToolsTab: { pt: 'Ferramentas', en: 'Tools' },
+  aiToolsA: { pt: 'O que uso,', en: 'What I use,' },
+  aiToolsB: { pt: 'e para quê.', en: 'and what for.' },
+  aiToolsLead: {
+    pt: 'Lista curta de propósito — ferramenta que se usa uma vez por trimestre é ferramenta em que você é ruim.',
+    en: 'A short list on purpose — a tool used once a quarter is a tool you are bad at.',
+  },
+  aiSeeLoop: { pt: 'O ciclo', en: 'The loop' },
+  aiSeeBuilt: { pt: 'O que saiu disso', en: 'What came out of it' },
+
+  /* Artigos */
+  articlesA: { pt: 'Notas sobre', en: 'Notes on' },
+  articlesB: { pt: 'o que construo.', en: 'what I build.' },
+  articlesLead: {
+    pt: 'Anotações sobre os problemas que apareceram no caminho e como foram resolvidos.',
+    en: 'Notes on the problems that showed up along the way, and how they got solved.',
+  },
+  articlesEmpty: {
+    pt: 'Ainda não publiquei nada por aqui.',
+    en: 'Nothing published here yet.',
+  },
+  articlesSoon: {
+    pt: 'Os primeiros textos chegam em breve — enquanto isso, dá uma olhada nos projetos.',
+    en: 'The first pieces are on the way — meanwhile, have a look at the work.',
+  },
   code: { pt: 'Código', en: 'Code' },
   workA: { pt: 'Explore os projetos,', en: 'Explore my work,' },
   workB: { pt: 'e o processo.', en: 'and the process.' },

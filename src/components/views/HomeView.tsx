@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import Explorations from '@/components/Explorations'
+import CityStrip from '@/components/CityStrip'
 import HatchBars from '@/components/HatchBars'
 import { ArrowUR, Arrow } from '@/components/Icons'
 import Plate from '@/components/Plate'
-import ProjectList from '@/components/ProjectList'
 import Reveal from '@/components/Reveal'
+import ScatterGallery from '@/components/ScatterGallery'
 import TwoTone from '@/components/TwoTone'
 import { explorations, hero, person, projects, stack, tracks } from '@/content/site'
 import { useLang } from '@/i18n/LangProvider'
@@ -15,6 +15,30 @@ export default function HomeView() {
   const { t, tr } = useLang()
   const years = new Date().getFullYear() - person.since
   const techCount = stack.reduce((n, g) => n + g.items.length, 0)
+  // Entregue conta só o que foi até o fim — a Intranet 2 ficou pelo caminho.
+  const shipped = projects.filter((p) => p.shipped !== false).length
+
+  // Projetos e estudos dividem o mesmo plano: os projetos abrem a página do
+  // case, os estudos ficam só como peça visual.
+  const scatter = [
+    ...projects.map((p) => ({
+      key: p.slug,
+      name: p.name,
+      kind: tr(p.kind),
+      image: p.image,
+      desc: tr(p.lead),
+      stack: p.stack,
+      href: `/work/${p.slug}`,
+    })),
+    ...explorations.map((e) => ({
+      key: e.name,
+      name: e.name,
+      kind: tr(e.kind),
+      image: e.image,
+      desc: tr(e.note),
+      href: e.href,
+    })),
+  ]
 
   return (
     <>
@@ -40,6 +64,8 @@ export default function HomeView() {
           </div>
         </div>
       </section>
+
+      <CityStrip />
 
       {/* ── Bancada ─────────────────────────────────────────────────────── */}
       <section className="sec" style={{ paddingBottom: 'clamp(46px, 6vh, 70px)' }}>
@@ -78,9 +104,10 @@ export default function HomeView() {
             </div>
           </Reveal>
 
-          <Reveal delay={60}>
-            <ProjectList projects={projects} />
-          </Reveal>
+        </div>
+
+        <div className="pad">
+          <ScatterGallery items={scatter} />
         </div>
       </section>
 
@@ -106,7 +133,7 @@ export default function HomeView() {
           <HatchBars
             bars={[
               { n: years, value: `${years}+`, caption: t('nYears') },
-              { n: projects.length, value: `${projects.length}+`, caption: t('nProjects') },
+              { n: shipped, value: String(shipped), caption: t('nProjects') },
               { n: techCount, value: `${techCount}`, caption: t('nTech') },
               { n: 2, value: '2', caption: t('nSides') },
             ]}
@@ -114,25 +141,6 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* ── Estudos ─────────────────────────────────────────────────────── */}
-      <section className="sec">
-        <span className="tab">{t('explorations')}</span>
-        <span className="corner" aria-hidden="true" />
-
-        <div className="pad" style={{ paddingTop: 20 }}>
-          <Reveal>
-            <div className="sec-mid">
-              <h2 className="h2">
-                <TwoTone lines={[t('explorations')]} />
-              </h2>
-              <p className="lead">{t('explorationsLead')}</p>
-            </div>
-          </Reveal>
-          <Reveal delay={60}>
-            <Explorations items={explorations} />
-          </Reveal>
-        </div>
-      </section>
     </>
   )
 }

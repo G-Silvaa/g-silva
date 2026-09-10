@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
+import Curtain from '@/components/Curtain'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 import { person } from '@/content/site'
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <LangProvider>
+          <Curtain />
           <a className="skip" href="#main">
             Ir para o conteúdo
           </a>

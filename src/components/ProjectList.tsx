@@ -41,7 +41,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             <span>
               <span className="nm">{project.name}</span>
               <span className="kd">
-                {tr(project.kind)} · {project.year}
+                {[tr(project.kind), project.org && tr(project.org)]
+                  .filter(Boolean)
+                  .join(' · ')}
               </span>
             </span>
 

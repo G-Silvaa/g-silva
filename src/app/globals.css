@@ -36,6 +36,11 @@
   --amber-lt: #f9cb80;
   --on-amber: #16140e;
 
+  /* A cortina tem papel próprio: um creme mais envelhecido que o da página,
+     com o topo levemente mais claro que o pé. */
+  --curtain-a: #faf5e4;
+  --curtain-b: #f1ebd2;
+
   --term: #17150e;
   --term-ink: #e9e3cf;
   --term-dim: #8a8471;
@@ -84,6 +89,9 @@
   --amber-2: #dd922f;
   --amber-lt: #f9cb80;
   --on-amber: #16140e;
+
+  --curtain-a: #1a180f;
+  --curtain-b: #0f0d07;
 
   --term: #0c0b07;
   --term-ink: #e9e3cf;
@@ -752,6 +760,445 @@ h4 {
   }
 }
 
+/* ── Faixa de cidade ──────────────────────────────────────────────────────── */
+
+.city {
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line-2);
+}
+/* A altura sai da proporção do desenho: com `slice` os prédios mais altos
+   perdiam o topo. */
+.city svg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1400 / 210;
+  display: block;
+}
+
+/* O caminhante.
+   Os membros são traços verticais que giram em torno do ombro e do quadril,
+   então cada um precisa do seu ponto de rotação declarado em coordenadas do
+   próprio desenho (a calçada está em y=176). */
+.city .walker {
+  cursor: pointer;
+  color: var(--ink-2);
+}
+
+.city .walker-travel {
+  animation: walk-across 52s linear infinite;
+}
+@keyframes walk-across {
+  from {
+    translate: -160px 0;
+  }
+  to {
+    translate: 1290px 0;
+  }
+}
+
+.city .walker-body {
+  animation: walk-bob 0.62s ease-in-out infinite alternate;
+}
+@keyframes walk-bob {
+  to {
+    translate: 0 -1.3px;
+  }
+}
+
+.city .limb {
+  transform-box: view-box;
+}
+.city .leg-a,
+.city .leg-b {
+  transform-origin: 0px 161px;
+  animation: walk-swing 0.62s ease-in-out infinite alternate;
+}
+.city .leg-b {
+  animation-direction: alternate-reverse;
+}
+.city .arm-a,
+.city .arm-b {
+  transform-origin: 0px 149px;
+  animation: walk-swing-arm 0.62s ease-in-out infinite alternate;
+}
+.city .arm-a {
+  animation-direction: alternate-reverse;
+}
+@keyframes walk-swing {
+  from {
+    rotate: -25deg;
+  }
+  to {
+    rotate: 25deg;
+  }
+}
+@keyframes walk-swing-arm {
+  from {
+    rotate: -18deg;
+  }
+  to {
+    rotate: 18deg;
+  }
+}
+
+/* Balão de fala: fechado por padrão, abre no cursor. */
+.city .hi {
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 14px 152px;
+  scale: 0.6;
+  transition: opacity 0.18s var(--ease), scale 0.3s cubic-bezier(0.2, 1.7, 0.4, 1);
+}
+.city .walker:hover .hi,
+.city .walker:focus-visible .hi {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Ele para para falar. */
+.city .walker:hover .walker-travel,
+.city .walker:hover .walker-body,
+.city .walker:hover .limb {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sem a regra explícita, o atalho global de "reduzir movimento" encerraria
+     a caminhada no último quadro — ou seja, com ele fora da tela. */
+  .city .walker-travel,
+  .city .walker-body,
+  .city .limb {
+    animation: none !important;
+  }
+}
+
+/* ── Galeria espalhada ────────────────────────────────────────────────────── */
+
+.scatter {
+  position: relative;
+  height: clamp(460px, 68vh, 660px);
+  overflow: hidden;
+  margin-inline: calc(-1 * var(--gutter));
+  cursor: grab;
+  touch-action: pan-y;
+}
+.scatter.is-drag {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.scatter-plane {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.scatter.is-drag .scatter-plane {
+  transition: none;
+}
+
+.scatter-item {
+  position: absolute;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: center;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  animation-name: bob;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+/* A flutuação mora num invólucro próprio para não brigar com o
+   `translate(-50%, -50%)` que centra a peça no seu ponto. */
+@keyframes bob {
+  from {
+    translate: 0 -7px;
+  }
+  to {
+    translate: 0 7px;
+  }
+}
+
+.scatter-item .shot {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  background: var(--tile);
+  border: 1px solid var(--line-2);
+  box-shadow: 0 12px 28px -20px rgba(22, 20, 14, 0.5);
+  transition: transform 0.45s var(--ease-soft), box-shadow 0.45s var(--ease-soft),
+    border-color 0.3s;
+}
+.scatter-item .shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+
+.scatter-item .lb {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 10px);
+  transform: translateX(-50%) translateY(-4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+}
+.scatter-item .lb .nm {
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.scatter-item .lb .kd {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber-2);
+}
+
+/* Peça no ar: para de flutuar, sobe acima das outras e inclina de leve. */
+.scatter-item.is-lifted {
+  z-index: 40 !important;
+  animation: none;
+  cursor: grabbing;
+}
+.scatter-item.is-lifted .shot {
+  transform: scale(1.14) rotate(-1.4deg);
+  border-color: var(--amber);
+  box-shadow: 0 36px 64px -30px rgba(22, 20, 14, 0.6);
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.scatter-item.is-lifted .lb {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.scatter-item.is-on .shot {
+  transform: scale(1.09);
+  border-color: var(--amber);
+  box-shadow: 0 26px 50px -26px rgba(22, 20, 14, 0.55);
+}
+.scatter-item.is-on .lb {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.scatter-count,
+.scatter-hint {
+  position: absolute;
+  bottom: 16px;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.scatter-count {
+  left: var(--gutter);
+}
+.scatter-hint {
+  right: var(--gutter);
+}
+
+/* Sem hover e sem cursor: o plano vira uma grade quieta. */
+.scatter.is-still {
+  height: auto;
+  overflow: visible;
+  cursor: auto;
+  margin-inline: 0;
+  padding-bottom: 34px;
+}
+.scatter.is-still .scatter-plane {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  transform: none !important;
+}
+.scatter.is-still .scatter-item {
+  position: static;
+  transform: none;
+  width: auto !important;
+  animation: none;
+}
+.scatter.is-still .scatter-item .shot {
+  aspect-ratio: 4 / 5 !important;
+}
+.scatter.is-still .scatter-item .lb {
+  position: static;
+  transform: none;
+  opacity: 1;
+  align-items: flex-start;
+  margin-top: 8px;
+  white-space: normal;
+}
+
+/* ── Ficha do projeto (abre por cima do plano) ────────────────────────────── */
+
+.peek-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 3vw, 40px);
+}
+
+.peek-scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--ink) 62%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  cursor: pointer;
+  animation: peek-fade 0.3s var(--ease) both;
+}
+@keyframes peek-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.peek-card {
+  position: relative;
+  z-index: 1;
+  width: min(1080px, 100%);
+  max-height: min(88vh, 780px);
+  display: flex;
+  flex-direction: column;
+  background: var(--page);
+  border: 1px solid var(--line);
+  box-shadow: 0 50px 90px -50px rgba(22, 20, 14, 0.6);
+  animation: peek-rise 0.42s var(--ease-soft) both;
+}
+@keyframes peek-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.peek-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line-2);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.peek-x {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color 0.25s;
+}
+.peek-x svg {
+  width: 13px;
+  height: 13px;
+}
+.peek-x:hover {
+  color: var(--amber-2);
+}
+
+.peek-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+}
+
+.peek-fig {
+  position: relative;
+  overflow: hidden;
+  background: var(--tile);
+  border-right: 1px solid var(--line-2);
+  will-change: transform;
+}
+.peek-fig img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.peek-txt {
+  padding: clamp(20px, 2.4vw, 32px);
+  overflow-y: auto;
+}
+
+.peek-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+.peek-chips span {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border: 1px solid var(--line-2);
+  padding: 4px 9px;
+}
+
+.peek-nav {
+  flex: none;
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line-2);
+}
+.peek-nav button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.peek-nav button:hover {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--on-amber);
+}
+.peek-nav svg {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 760px) {
+  .peek-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .peek-fig {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-2);
+    aspect-ratio: 16 / 10;
+  }
+}
+
 /* ── Placas ───────────────────────────────────────────────────────────────── */
 
 /* Painel com barra de título âmbar — a "janela" do sistema. */
@@ -964,6 +1411,101 @@ h4 {
   color: var(--ink-2);
 }
 
+/* ── Esteira do fluxo ─────────────────────────────────────────────────────── */
+
+.pipe {
+  width: 100%;
+  overflow: hidden;
+  border-block: 1px solid var(--line-2);
+}
+.pipe svg {
+  width: 100%;
+  height: clamp(230px, 26vw, 380px);
+  display: block;
+}
+
+/* ── Regras do ciclo ──────────────────────────────────────────────────────── */
+
+.rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  border-top: 1px solid var(--line-2);
+  border-left: 1px solid var(--line-2);
+}
+.rule {
+  padding: clamp(22px, 2.6vw, 34px);
+  border-right: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+}
+.rule .no {
+  display: block;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  color: var(--amber-2);
+  margin-bottom: 16px;
+}
+.rule h3 {
+  margin-bottom: 12px;
+}
+.rule p {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* ── Ferramentas ──────────────────────────────────────────────────────────── */
+
+.tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+}
+.tool {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tool-tile {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  max-height: 190px;
+  margin-bottom: 16px;
+  background: color-mix(in srgb, var(--tile) 70%, transparent);
+  border: 1px solid var(--line-2);
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+}
+/* A marca é a tinta do tema recortada pelo SVG oficial — que vem
+   monocromático e preto, e sozinho não acompanharia claro/escuro. */
+.tool-mark {
+  width: 42%;
+  aspect-ratio: 1;
+  background-color: var(--ink);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  transition: background-color 0.3s var(--ease);
+}
+.tool:hover .tool-tile {
+  border-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 12%, transparent);
+}
+.tool:hover .tool-mark {
+  background-color: var(--amber-2);
+}
+.tool .nm {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.tool .rl {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
 /* ── Grade de habilidades ─────────────────────────────────────────────────── */
 
 .grid4 {
@@ -1092,6 +1634,119 @@ h4 {
   color: var(--ink-3);
 }
 
+/* ── Cortina de passagem ──────────────────────────────────────────────────── */
+
+/* Oito colunas sobem, cobrem a tela com o mesmo papel do site e seguem subindo
+   até sair pelo topo. Os tempos aqui espelham as constantes do Curtain.tsx. */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  pointer-events: none;
+}
+.curtain.is-boot,
+.curtain.is-cover {
+  pointer-events: auto;
+}
+/* Fora de cena a cortina não deve nem existir para o cursor. */
+.curtain.is-idle {
+  visibility: hidden;
+}
+
+.curtain-col {
+  flex: 1 1 0;
+  background-color: var(--curtain-a);
+  background-image: repeating-linear-gradient(
+      180deg,
+      var(--rule) 0 1px,
+      transparent 1px 4px
+    ),
+    linear-gradient(180deg, var(--curtain-a) 0%, var(--curtain-b) 100%);
+  border-right: 1px solid var(--line-2);
+  /* Fora de cena a coluna espera ACIMA da tela: o gesto é sempre de cima
+     para baixo, tanto ao cobrir quanto ao sair. */
+  transform: translateY(-100%);
+  will-change: transform;
+}
+.curtain-col:last-child {
+  border-right: 0;
+}
+
+.curtain.is-boot .curtain-col {
+  transform: none;
+}
+
+.curtain.is-cover .curtain-col {
+  animation: curtain-in 0.58s cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: calc(var(--i) * 22ms);
+}
+@keyframes curtain-in {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* A cortina recolhe pelo mesmo caminho por onde veio — sobe de volta. O
+   escalonamento é invertido para o gesto de subida não repetir o da descida. */
+.curtain.is-reveal .curtain-col {
+  animation: curtain-out 0.66s cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: calc((7 - var(--i)) * 26ms);
+}
+@keyframes curtain-out {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.curtain-label {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding-inline: var(--gutter);
+  text-align: center;
+  font-size: clamp(30px, 5vw, 62px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  color: var(--ink);
+  pointer-events: none;
+  mix-blend-mode: normal;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.26s var(--ease), transform 0.4s var(--ease);
+}
+.curtain-label i {
+  font-style: normal;
+  color: var(--amber-2);
+}
+/* O atraso espera as colunas terminarem de cobrir (0,58s + 7 × 22ms ≈ 0,73s);
+   antes disso o nome apareceria por cima da página que ainda está à vista. */
+.curtain-label[data-on="true"] {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.6s;
+}
+
+/* ── Estado vazio ─────────────────────────────────────────────────────────── */
+
+.empty {
+  border: 1px solid var(--line-2);
+  background: color-mix(in srgb, var(--tile) 45%, transparent);
+  padding: clamp(34px, 6vw, 72px);
+  text-align: center;
+}
+.empty .lead {
+  margin-inline: auto;
+}
+
 /* ── Revelação ────────────────────────────────────────────────────────────── */
 
 .rv {
@@ -1161,6 +1816,43 @@ h4 {
   .peek {
     display: none;
   }
+
+  /* Mesmo antes do JS decidir, abaixo de 860px o plano já é uma grade. */
+  .scatter {
+    height: auto;
+    overflow: visible;
+    cursor: auto;
+    margin-inline: 0;
+    padding-bottom: 34px;
+  }
+  .scatter .scatter-plane {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 16px;
+    transform: none !important;
+  }
+  .scatter .scatter-item {
+    position: static;
+    transform: none;
+    width: auto !important;
+    animation: none;
+  }
+  .scatter .scatter-item .shot {
+    aspect-ratio: 4 / 5 !important;
+  }
+  .scatter .scatter-item .lb {
+    position: static;
+    transform: none;
+    opacity: 1;
+    align-items: flex-start;
+    margin-top: 8px;
+    white-space: normal;
+  }
+  .scatter-count,
+  .scatter-hint {
+    bottom: 0;
+  }
   .grid4 > div {
     border-right: 0;
   }
@@ -1180,5 +1872,9 @@ h4 {
   .rv {
     opacity: 1;
     transform: none;
+  }
+  /* Sem cortina: a troca de página passa a ser instantânea. */
+  .curtain {
+    display: none;
   }
 }

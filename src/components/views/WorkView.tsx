@@ -45,7 +45,7 @@ export default function WorkView() {
         </div>
       </section>
 
-      <section className="sec">
+      <section className="sec" hidden={explorations.length === 0}>
         <span className="tab">{t('explorations')}</span>
         <span className="corner" aria-hidden="true" />
         <div className="pad" style={{ paddingTop: 22 }}>

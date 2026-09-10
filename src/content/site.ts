@@ -16,7 +16,12 @@ export type T = { pt: string; en: string }
 export interface Project {
   slug: string
   name: string
-  year: string
+  /** Onde o projeto foi feito. */
+  org?: T
+  /** `false` quando você saiu antes do projeto ser concluído. */
+  shipped?: boolean
+  /** Seu papel no projeto. */
+  role?: T
   kind: T
   lead: T
   /** Parágrafo maior, aparece no arquivo e na ficha aberta. */
@@ -31,6 +36,8 @@ export interface Exploration {
   name: string
   kind: T
   note: T
+  /** Ladrilho usado na galeria espalhada da home. */
+  image: string
   href?: string
 }
 
@@ -44,11 +51,9 @@ export const person = {
     en: 'Full-Stack Developer',
   } as T,
   location: { pt: 'Brasil', en: 'Brazil' } as T,
-  /** ⚠️ Troque se preferir outro endereço público. */
-  email: 'aglissilva17@gmail.com',
+  email: 'geniltonsilva2002@gmail.com',
   linkedin: 'https://www.linkedin.com/in/genilton-silva-974705204/',
-  /** ⚠️ Coloque seu usuário do GitHub aqui. */
-  github: 'https://github.com/',
+  github: 'https://github.com/G-Silvaa',
   /** Ano em que começou a programar — alimenta o contador de experiência. */
   since: 2021,
 }
@@ -218,133 +223,272 @@ export const stack: { group: T; items: string[] }[] = [
 ]
 
 /* ── Projetos ─────────────────────────────────────────────────────────────── */
-/* ⚠️ EXEMPLOS — troque tudo abaixo pelos seus projetos.                       */
 
+/**
+ * Projetos reais. Os dois primeiros estão no ar e usam captura do próprio
+ * site; os demais são sistemas internos e usam arte provisória até chegarem
+ * as telas de verdade — troque o campo `image` quando tiver.
+ *
+ */
 export const projects: Project[] = [
   {
-    slug: 'orbita',
-    name: 'Órbita',
-    year: '2025',
-    kind: { pt: 'Plataforma SaaS', en: 'SaaS platform' },
+    slug: 'jed',
+    name: 'Jovens Empreendedores Digitais',
+    // ⚠️ De quem é este projeto? Preencha a organização.
+    role: { pt: 'Full-stack', en: 'Full-stack' },
+    kind: { pt: 'Portal público', en: 'Public portal' },
     lead: {
-      pt: 'Painel multiempresa para gestão de operação, com controle de acesso por papel e relatórios em tempo real.',
-      en: 'Multi-tenant operations dashboard with role-based access control and live reporting.',
+      pt: 'Portal de um programa de empreendedorismo digital: cadastro, trilha de conteúdo e área do aluno.',
+      en: 'Portal for a digital entrepreneurship programme: sign-up, content track and student area.',
     },
     body: {
-      pt: 'Backend em Spring Boot com isolamento por tenant no nível da consulta, autenticação JWT e auditoria de cada escrita. O front em Next.js consome a API por um cliente tipado gerado do OpenAPI, então contrato quebrado vira erro de compilação e não bug em produção.',
-      en: 'Spring Boot back end with query-level tenant isolation, JWT auth and an audit trail on every write. The Next.js front end talks to the API through a typed client generated from OpenAPI, so a broken contract becomes a compile error instead of a production bug.',
+      pt: 'O programa leva ferramentas digitais gratuitas a estudantes do ensino público. O portal é a porta de entrada: apresenta o projeto, abre as inscrições, organiza as trilhas de conteúdo e publica notícias e resultados. Segundo os números do próprio site, alcançou mais de 14 mil estudantes em 53 municípios.',
+      en: 'The programme takes free digital tools to public-school students. The portal is the front door: it presents the project, opens registration, organises the content tracks and publishes news and results. By the site\'s own numbers it reached over 14,000 students across 53 municipalities.',
     },
-    stack: ['Spring Boot', 'PostgreSQL', 'Next.js', 'TypeScript', 'Docker'],
-    image: '/work/orbita.svg',
+    stack: ['Angular', 'Spring'],
+    image: '/work/jed.png',
+    live: 'https://empreendedoresdigitais.ifce.edu.br/',
   },
   {
-    slug: 'contracorrente',
-    name: 'Contracorrente',
-    year: '2025',
-    kind: { pt: 'Dados em tempo real', en: 'Real-time data' },
+    slug: 'edital360',
+    name: 'Edital 360',
+    // ⚠️ De quem é este projeto? Preencha a organização.
+    role: { pt: 'Full-stack', en: 'Full-stack' },
+    kind: { pt: 'Plataforma de concursos', en: 'Selection-process platform' },
     lead: {
-      pt: 'Pipeline de eventos financeiros com painel ao vivo — da ingestão à visualização em menos de um segundo.',
-      en: 'Financial event pipeline with a live dashboard — ingestion to chart in under a second.',
+      pt: 'Plataforma de editais em geral — concursos, processos seletivos, inscrições abertas e acompanhamento.',
+      en: 'A platform for public notices at large — tenders, selection processes, open registration and tracking.',
     },
     body: {
-      pt: 'Consumidores em Java processam o fluxo de eventos, agregam por janela e publicam via WebSocket. O painel em Angular usa RxJS para compor os streams e só repinta o que mudou, segurando milhares de atualizações por minuto sem engasgo.',
-      en: 'Java consumers process the event stream, aggregate it by window and publish over WebSocket. The Angular dashboard composes those streams with RxJS and repaints only what changed, holding thousands of updates a minute without a stutter.',
+      pt: 'Reúne num lugar só o que antes ficava espalhado em PDFs: notícias, editais de todo tipo, inscrições abertas por instituição e vaga, e o acompanhamento de cada processo até a conclusão. O candidato cria conta, se inscreve e acompanha o andamento sem precisar caçar documento em página de notícia.',
+      en: 'It gathers in one place what used to be scattered across PDFs: news, notices of every kind, open registrations by institution and vacancy, and the tracking of each process through to its conclusion. Candidates create an account, register and follow progress without hunting for documents on a news page.',
     },
-    stack: ['Java 21', 'Kafka', 'Angular', 'RxJS', 'Redis'],
-    image: '/work/contracorrente.svg',
+    stack: ['React', 'Spring'],
+    image: '/work/edital360.png',
+    live: 'https://concursos.faifce.ifce.edu.br/',
   },
   {
-    slug: 'nimbus',
-    name: 'Nimbus',
-    year: '2024',
-    kind: { pt: 'API & infraestrutura', en: 'API & infrastructure' },
+    slug: 'intranet2',
+    name: 'Intranet 2',
+    shipped: false,
+    org: { pt: 'IFCE Campus Maracanaú', en: 'IFCE Campus Maracanaú' },
+    role: { pt: 'Full-stack', en: 'Full-stack' },
+    kind: { pt: 'Sistema ERP', en: 'ERP system' },
     lead: {
-      pt: 'Serviço de processamento de mídia: upload, transcodificação assíncrona e entrega por CDN.',
-      en: 'Media processing service: upload, async transcoding and CDN delivery.',
+      pt: 'Evolução do ERP da intranet do IFCE, redesenhada para servir todos os campi.',
+      en: 'Evolution of the IFCE intranet ERP, redesigned to serve every campus.',
     },
     body: {
-      pt: 'Fila de jobs com retry exponencial e dead-letter, workers isolados em container e armazenamento em object storage com URLs assinadas. Métricas expostas em Prometheus, então dá pra ver a fila crescendo antes do usuário reclamar.',
-      en: 'Job queue with exponential retry and a dead-letter path, workers isolated in containers, object storage with signed URLs. Metrics exposed to Prometheus, so you watch the queue grow before a user complains.',
+      pt: 'A segunda geração do sistema, com melhorias significativas sobre a primeira e a intenção de sair de um campus para a rede inteira. Trabalhei nos dois lados: a interface em Angular e o Spring que serve os dados por trás dela, mantendo a tela sempre em dia.',
+      en: 'The second generation of the system, with significant improvements over the first and the intent to move from one campus to the whole network. I worked both ends: the Angular interface and the Spring service behind it, keeping the screen current.',
     },
-    stack: ['Spring Boot', 'Redis', 'Docker', 'S3', 'Prometheus'],
-    image: '/work/nimbus.svg',
+    stack: ['Angular', 'Spring'],
+    image: '/work/intranet2.svg',
   },
   {
-    slug: 'pauta',
-    name: 'Pauta',
-    year: '2024',
-    kind: { pt: 'Produto web', en: 'Web product' },
+    slug: 'intranet',
+    name: 'Intranet',
+    org: { pt: 'IFCE Campus Maracanaú', en: 'IFCE Campus Maracanaú' },
+    role: { pt: 'Full-stack', en: 'Full-stack' },
+    kind: { pt: 'Sistema ERP', en: 'ERP system' },
     lead: {
-      pt: 'Ferramenta de colaboração editorial com edição simultânea, histórico de versões e fluxo de aprovação.',
-      en: 'Editorial collaboration tool with simultaneous editing, version history and an approval flow.',
+      pt: 'ERP da intranet do campus, atendendo mais de 3.000 alunos e servidores.',
+      en: 'Campus intranet ERP, serving more than 3,000 students and staff.',
     },
     body: {
-      pt: 'Resolução de conflito no servidor por operação, não por documento inteiro — dois editores no mesmo parágrafo não sobrescrevem um ao outro. Renderização no servidor com Next.js deixa cada pauta indexável e o primeiro paint quase instantâneo.',
-      en: 'Conflicts resolved server-side per operation rather than per document — two editors in the same paragraph no longer overwrite each other. Server rendering with Next.js keeps every piece indexable and the first paint near-instant.',
+      pt: 'O sistema que a comunidade acadêmica usa no dia a dia: acesso e gestão dos dados que sustentam a operação do campus. O objetivo era juntar num lugar só o que estava espalhado, com uma experiência integrada para aluno e servidor.',
+      en: 'The system the academic community uses daily: access to and management of the data that keeps the campus running. The goal was to gather in one place what was scattered, with a single integrated experience for students and staff.',
     },
-    stack: ['Next.js', 'TypeScript', 'PostgreSQL', 'WebSocket'],
-    image: '/work/pauta.svg',
+    stack: ['React', 'Spring'],
+    image: '/work/intranet.png',
+    live: 'https://intranet.maracanau.ifce.edu.br/',
   },
   {
-    slug: 'farol',
-    name: 'Farol',
-    year: '2023',
-    kind: { pt: 'App mobile', en: 'Mobile app' },
+    slug: 'sysra',
+    name: 'SysRa',
+    org: { pt: 'IFCE Campus Maracanaú', en: 'IFCE Campus Maracanaú' },
+    role: { pt: 'Full-stack', en: 'Full-stack' },
+    kind: { pt: 'Gestão alimentar', en: 'Food management' },
     lead: {
-      pt: 'Aplicativo de acompanhamento de hábitos com sincronização offline-first e notificações locais.',
-      en: 'Habit-tracking app with offline-first sync and local notifications.',
+      pt: 'Aplicação de gerenciamento alimentar do campus, pensada para escalar aos demais.',
+      en: 'Campus food management application, designed to scale to the other campuses.',
     },
     body: {
-      pt: 'Escreve primeiro no banco local e reconcilia com o servidor quando a conexão volta, usando relógio lógico para ordenar as escritas. O usuário registra o hábito no metrô sem sinal e encontra tudo no lugar quando sai.',
-      en: 'Writes hit the local database first and reconcile with the server when the connection returns, ordered by a logical clock. You log a habit on the subway with no signal and everything is in place when you surface.',
+      pt: 'Nasceu para resolver a gestão alimentar do Campus Maracanaú e foi desenhada desde o começo para atender depois os outros campi. Trabalhei nos dois lados: a interface em Angular, cuidando da interatividade, e o Spring que alimenta a tela por trás.',
+      en: 'It started to solve food management at Campus Maracanaú and was designed from the outset to serve the other campuses later. I worked both ends: the Angular interface, handling interactivity, and the Spring service feeding it behind the scenes.',
     },
-    stack: ['React Native', 'TypeScript', 'SQLite', 'Spring Boot'],
-    image: '/work/farol.svg',
+    stack: ['Angular', 'Spring'],
+    image: '/work/sysra.svg',
+  },
+  {
+    slug: 'avisos',
+    name: 'Avisos',
+    org: { pt: 'IFCE Campus Maracanaú', en: 'IFCE Campus Maracanaú' },
+    role: { pt: 'Full-stack', en: 'Full-stack' },
+    kind: { pt: 'Painel em tempo real', en: 'Real-time display' },
+    lead: {
+      pt: 'Avisos exibidos em tempo real nos monitores espalhados pelo campus.',
+      en: 'Notices shown in real time on the monitors around the campus.',
+    },
+    body: {
+      pt: 'Os monitores do campus precisavam mostrar informação que muda ao longo do dia sem ninguém ter que trocar arquivo na mão. O painel atualiza sozinho, então o que está na tela é sempre o aviso vigente. Trabalhei nos dois lados: o painel em Angular e o serviço em .NET que entrega os avisos a ele.',
+      en: 'The campus monitors needed to show information that changes through the day without anyone swapping a file by hand. The board updates on its own, so what is on screen is always the current notice. I worked both ends: the Angular board and the .NET service that feeds it the notices.',
+    },
+    stack: ['Angular', '.NET'],
+    image: '/work/avisos.svg',
+  },
+  {
+    slug: 'chaves',
+    name: 'Chaves',
+    org: { pt: 'IFCE Campus Maracanaú', en: 'IFCE Campus Maracanaú' },
+    role: { pt: 'Full-stack · apoio ao time', en: 'Full-stack · team support' },
+    kind: { pt: 'Controle de armários', en: 'Locker control' },
+    lead: {
+      pt: 'Controle das chaves dos armários do campus — quem pegou, quando e o que ainda está fora.',
+      en: 'Control of the campus locker keys — who took one, when, and what is still out.',
+    },
+    body: {
+      pt: 'Neste eu entrei como apoio: montei a estrutura do projeto, corrigi erros de pipeline, tirei dúvidas do time e desenvolvi nos dois lados, com Angular na interface e Spring por trás. O sistema deixou o controle dos armários rastreável, no lugar do caderno na portaria.',
+      en: 'Here I came in as support: I set up the project structure, fixed pipeline failures, answered the team\'s questions and built on both ends, with Angular on the interface and Spring behind it. The system made locker control traceable, replacing the notebook at the front desk.',
+    },
+    stack: ['Angular', 'Spring'],
+    image: '/work/chaves.svg',
   },
 ]
 
-/* ── Explorações (projetos menores / estudos) ─────────────────────────────── */
-/* ⚠️ EXEMPLOS — troque pelos seus.                                            */
+/* ── Explorações ──────────────────────────────────────────────────────────── */
 
-export const explorations: Exploration[] = [
-  {
-    name: 'Sentinela',
-    kind: { pt: 'Observabilidade', en: 'Observability' },
-    note: {
-      pt: 'Stack de métricas e alerta em Grafana + Prometheus, empacotada num docker-compose só.',
-      en: 'Metrics and alerting stack on Grafana + Prometheus, packed into a single docker-compose.',
+/**
+ * Estudos e projetos menores. Está vazio de propósito — o que havia aqui era
+ * exemplo inventado. Acrescente os seus e eles voltam a aparecer na home e em
+ * /work automaticamente.
+ */
+export const explorations: Exploration[] = []
+
+/* ── Artigos ──────────────────────────────────────────────────────────────── */
+
+export interface Article {
+  slug: string
+  title: T
+  /** Data em ISO (2026-09-10) — usada para ordenar e exibir. */
+  date: string
+  lead: T
+  /** Link externo, se o texto estiver publicado em outro lugar. */
+  href?: string
+}
+
+/**
+ * Vazio de propósito. Acrescente aqui e a página /articles se preenche
+ * sozinha — o estado vazio some assim que houver o primeiro item.
+ */
+export const articles: Article[] = []
+
+/* ── Página de IA ─────────────────────────────────────────────────────────── */
+
+/**
+ * ⚠️ Esta página é opinião — revise no seu tom. O conteúdo abaixo segue o que
+ * você contou: a IA escreve a maior parte, os MCPs adiantam o trabalho por
+ * alcançarem o repositório direto, e nada sobe sem revisão sua linha a linha.
+ */
+export const ai = {
+  lines: {
+    pt: ['IA não projeta.', '*Faz os outros 80%*'],
+    en: ['AI does not design.', '*It does the other 80%*'],
+  } as { pt: string[]; en: string[] },
+
+  lead: {
+    pt: 'Usando IA em meu fluxo de trabalho diário para execução mais rápida, melhores decisões, prototipagem rápida e envio de produtos do mundo real.',
+    en: 'Using AI across my daily workflow for faster execution, better decisions, rapid prototyping, and shipping real-world products.',
+  } as T,
+
+  /** As colunas da esteira. Cada coluna vira um grupo de cartões. */
+  pipeline: [
+    { x: 30, w: 186, cards: [{ title: 'Prompt', sub: 'CLAUDE · CONTEXTO DO REPO', tone: 'plain' as const }] },
+    { x: 282, w: 186, cards: [{ title: 'Agente', sub: 'PLANEJA · EXECUTA · VERIFICA', tone: 'amber' as const }] },
+    {
+      x: 534,
+      w: 200,
+      cards: [
+        { title: 'Código', sub: 'SERVICE.JAVA · SPRING', tone: 'plain' as const },
+        { title: 'Na mão', sub: 'QUANDO SAI MAIS RÁPIDO', tone: 'amber' as const },
+        { title: 'Testes', sub: 'JUNIT · E2E', tone: 'plain' as const },
+        { title: 'Docs', sub: 'OPENAPI · README', tone: 'plain' as const },
+      ],
     },
-  },
-  {
-    name: 'Bússola',
-    kind: { pt: 'Ferramenta CLI', en: 'CLI tool' },
-    note: {
-      pt: 'Gerador de scaffold para serviços Spring: módulo, entidade, repositório e teste em um comando.',
-      en: 'Scaffold generator for Spring services: module, entity, repository and test in one command.',
+    { x: 800, w: 186, cards: [{ title: 'Revisão', sub: 'LINHA A LINHA · NA MÃO', tone: 'amber' as const }] },
+    { x: 1052, w: 186, cards: [{ title: 'Commit', sub: 'GIT · MAVEN', tone: 'ink' as const }] },
+  ],
+
+  /** O ciclo, em regras. */
+  loop: [
+    {
+      title: { pt: 'Agente não é chat com ferramenta', en: 'An agent is not a chat with tools' } as T,
+      body: {
+        pt: 'Agente é o modelo rodando em laço: planeja um passo, executa, lê o resultado e decide o próximo — até fechar a tarefa ou bater num critério de parada. O que o separa de uma resposta de chat não é a qualidade do texto, é a autonomia ao longo de vários passos e a capacidade de causar efeito: abrir o arquivo, rodar o teste, ler a falha e voltar sozinho. É aí que o ganho de verdade aparece.',
+        en: 'An agent is the model running in a loop: it plans a step, runs it, reads the result and decides the next — until the task closes or it hits a stopping condition. What separates it from a chat reply is not the quality of the text; it is autonomy across several steps and the ability to cause effects: open the file, run the test, read the failure and come back on its own. That is where the real gain shows up.',
+      } as T,
     },
-  },
-  {
-    name: 'Cache Layer',
-    kind: { pt: 'Estudo de performance', en: 'Performance study' },
-    note: {
-      pt: 'Comparação de estratégias de cache em Redis sob carga sintética, com os números documentados.',
-      en: 'A comparison of Redis caching strategies under synthetic load, with the numbers written down.',
+    {
+      title: { pt: 'A IA escreve a maior parte — e escreve bem', en: 'AI writes most of it — and writes it well' } as T,
+      body: {
+        pt: 'Código, teste e documentação saem dela hoje, e saem em bom nível: o modelo acompanha o padrão do projeto e cobre caso de borda que passaria batido na pressa. Ela auxilia em boa parte do desenvolvimento, e isso me deixa gastar o tempo onde ele rende — decidir o desenho da solução.',
+        en: 'Code, tests and documentation come out of it today, and they come out well: the model follows the project pattern and covers edge cases that would slip past under pressure. It assists across much of the development, which lets me spend time where it pays off — deciding the shape of the solution.',
+      } as T,
     },
-  },
-  {
-    name: 'Kit CI',
-    kind: { pt: 'Automação', en: 'Automation' },
-    note: {
-      pt: 'Workflows reutilizáveis de GitHub Actions para build, teste e publicação de imagem.',
-      en: 'Reusable GitHub Actions workflows for build, test and image publishing.',
+    {
+      title: { pt: 'Dupla camada de revisão', en: 'A double layer of review' } as T,
+      body: {
+        pt: 'Nada sobe sem eu ler linha por linha. Depois disso, devolvo o mesmo trecho para a IA revisar de novo, com outro olhar: uma camada pega o que a outra deixou passar. Código que eu não sei explicar não entra — a responsabilidade pelo que está em produção é minha, não da ferramenta.',
+        en: 'Nothing ships without me reading it line by line. Then I hand the same passage back to the AI for a second pass with fresh eyes: one layer catches what the other let through. Code I cannot explain does not go in — what runs in production is my responsibility, not the tool\'s.',
+      } as T,
     },
-  },
-  {
-    name: 'Tipografia',
-    kind: { pt: 'Experimento', en: 'Experiment' },
-    note: {
-      pt: 'Estudo de animação de texto com Canvas e IntersectionObserver, sem biblioteca externa.',
-      en: 'A text animation study built on Canvas and IntersectionObserver, with no external library.',
+    {
+      title: { pt: 'Às vezes é mais rápido escrever', en: 'Sometimes writing it is faster' } as T,
+      body: {
+        pt: 'Em problema pequeno e específico, explicar o que eu quero custa mais que fazer. Nesses casos escrevo direto — a ferramenta é meio, não obrigação.',
+        en: 'On a small, specific problem, explaining what I want costs more than doing it. In those cases I write it myself — the tool is a means, not an obligation.',
+      } as T,
     },
-  },
-]
+  ],
+
+  /** ⚠️ Acrescente o que você construiu assim. */
+  built: [
+    {
+      name: { pt: 'Este portfólio', en: 'This portfolio' } as T,
+      note: {
+        pt: 'Next.js e TypeScript, do layout às ilustrações em SVG, construído em par com um assistente de código.',
+        en: 'Next.js and TypeScript, from the layout to the SVG illustrations, built in pair with a coding assistant.',
+      } as T,
+    },
+  ],
+
+  /**
+   * As marcas vêm da coleção Simple Icons (CC0) em `public/tools`. Para
+   * acrescentar outra, baixe o SVG lá e aponte o campo `icon`.
+   */
+  tools: [
+    {
+      name: 'Claude',
+      icon: '/tools/claude.svg',
+      role: { pt: 'Agente de código, no terminal', en: 'Coding agent, in the terminal' } as T,
+    },
+    {
+      name: 'MCP',
+      icon: '/tools/mcp.svg',
+      role: {
+        pt: 'Protocolo aberto: um servidor expõe ferramentas, recursos e prompts numa interface comum',
+        en: 'Open protocol: a server exposes tools, resources and prompts through one common interface',
+      } as T,
+    },
+    {
+      name: 'ChatGPT',
+      icon: '/tools/openai.svg',
+      role: { pt: 'Rascunho, pesquisa e segunda opinião', en: 'Drafting, research and a second opinion' } as T,
+    },
+    {
+      name: 'Git',
+      icon: '/tools/git.svg',
+      role: { pt: 'A rede de segurança de tudo', en: 'The safety net under all of it' } as T,
+    },
+  ],
+}

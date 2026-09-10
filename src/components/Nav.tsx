@@ -11,6 +11,8 @@ const ROUTES = [
   { href: '/', key: 'navHome' },
   { href: '/work', key: 'navWork' },
   { href: '/about', key: 'navAbout' },
+  { href: '/ai', key: 'navAi' },
+  { href: '/articles', key: 'navArticles' },
 ] as const
 
 export default function Nav() {

@@ -28,8 +28,6 @@ Todo o conteúdo está em **um arquivo só**: `src/content/site.ts`.
 
 | Onde | O quê |
 | --- | --- |
-| `person.email` | Está com `aglissilva17@gmail.com` — troque se quiser outro endereço público |
-| `person.github` | Está com a URL genérica do GitHub — ponha seu usuário |
 | `person.since` | Ano em que começou a programar (alimenta o "X anos programando") |
 | `projects` | **Os 5 projetos são exemplos.** Troque nome, descrição, stack, ano e links |
 | `explorations` | **Os 5 estudos são exemplos.** Troque pelos seus |
