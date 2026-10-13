@@ -62,12 +62,10 @@ export default function ArticlesView() {
                         })}
                       </span>
                     </span>
-                    <span>
-                      <span className="desc" style={{ display: 'block' }}>
-                        {tr(article.lead)}
-                      </span>
+                    <span className="desc" style={{ display: 'block' }}>
+                      {tr(article.lead)}
                     </span>
-                    <span className="open">
+                    <span className="btn btn--amber btn--sm cta">
                       {t('readArticle')}
                       <ArrowUR />
                     </span>

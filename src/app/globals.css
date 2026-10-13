@@ -700,6 +700,18 @@ h4 {
   .work-row:hover .open .ar {
     transform: translate(3px, -3px);
   }
+  /* Na lista de artigos o convite é um botão: a linha inteira acende ele. */
+  .work-row:hover .cta {
+    background: var(--amber-lt);
+    border-color: var(--amber-lt);
+  }
+  .work-row:hover .cta .ar {
+    transform: translate(3px, -3px);
+  }
+}
+.work-row .cta {
+  align-self: center;
+  white-space: nowrap;
 }
 
 /* Miniatura que segue o cursor sobre a lista de projetos. */
@@ -1997,9 +2009,11 @@ h4 {
     grid-column: 2;
     max-width: none;
   }
-  .work-row .open {
+  .work-row .open,
+  .work-row .cta {
     grid-column: 2;
     align-self: start;
+    justify-self: start;
   }
 }
 
