@@ -1424,6 +1424,227 @@ h4 {
   display: block;
 }
 
+/* ── Artigo ───────────────────────────────────────────────────────────────── */
+
+/* Coluna de leitura estreita: a medida fica perto de 70 caracteres. */
+.prose {
+  max-width: 70ch;
+  margin-inline: auto;
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  color: var(--ink-2);
+}
+.prose > * + * {
+  margin-top: 1.15em;
+}
+.prose h2.h3 {
+  color: var(--ink);
+  line-height: 1.15;
+  margin-top: 2.2em;
+}
+.prose h2.h3 + * {
+  margin-top: 0.7em;
+}
+.prose strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.prose a:not(.cite) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+.prose .cite {
+  font-size: 0.78em;
+  font-family: var(--mono);
+  color: var(--amber-2);
+  vertical-align: 0.25em;
+  margin-left: 1px;
+}
+.prose :not(pre) > code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  padding: 1px 6px;
+  background: var(--tile);
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+}
+.prose ul {
+  padding-left: 0;
+  list-style: none;
+}
+.prose ul li {
+  position: relative;
+  padding-left: 22px;
+}
+.prose ul li + li {
+  margin-top: 0.6em;
+}
+.prose ul li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.72em;
+  width: 8px;
+  height: 1.5px;
+  background: var(--amber);
+}
+.prose figure {
+  margin-block: 1.8em;
+}
+.prose pre {
+  overflow-x: auto;
+  padding: 18px 20px;
+  background: var(--term);
+  color: var(--term-ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.65;
+  border: 1px solid var(--line);
+}
+.prose figcaption {
+  margin-top: 10px;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+/* Em tela larga, as capturas saem da coluna de texto para ganhar leitura. */
+@media (min-width: 1280px) {
+  .prose-fig {
+    margin-inline: -170px;
+  }
+}
+.prose-shot {
+  border: 1px solid var(--line);
+  background: var(--tile);
+  padding: clamp(8px, 1.4vw, 18px);
+}
+.prose-shot img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 620px;
+  margin-inline: auto;
+}
+.prose-note {
+  padding: 16px 20px;
+  border-left: 3px solid var(--amber);
+  background: color-mix(in srgb, var(--amber) 9%, transparent);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+.prose-sources {
+  margin-top: 3.2em !important;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.prose-sources ol {
+  margin-top: 14px;
+  padding-left: 22px;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.prose-sources li + li {
+  margin-top: 0.55em;
+}
+.prose-sources li::marker {
+  color: var(--amber-2);
+  font-family: var(--mono);
+  font-size: 0.85em;
+}
+.prose-sources li:target {
+  background: color-mix(in srgb, var(--amber) 14%, transparent);
+}
+.prose-sources span {
+  color: var(--ink-3);
+}
+
+/* ── Onde a IA entra ──────────────────────────────────────────────────────── */
+
+.uses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line-2);
+  border-left: 1px solid var(--line-2);
+}
+.use {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 236px;
+  padding: clamp(22px, 2.4vw, 32px);
+  border-right: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+  transition: background 0.3s var(--ease);
+}
+/* Filete âmbar que cresce no topo do cartão ao passar o mouse. */
+.use::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 3px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease);
+}
+.use-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: clamp(28px, 3.4vw, 48px);
+}
+.use .no {
+  font-family: var(--mono);
+  font-size: var(--fs-meta);
+  color: var(--amber-2);
+}
+.use .tg {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.use h3 {
+  margin-bottom: 10px;
+}
+.use p {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+@media (hover: hover) {
+  .use:hover {
+    background: color-mix(in srgb, var(--amber) 6%, transparent);
+  }
+  .use:hover::before {
+    transform: scaleX(1);
+  }
+}
+@media (max-width: 1100px) {
+  .uses {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .uses {
+    grid-template-columns: 1fr;
+  }
+  .use {
+    min-height: 0;
+  }
+}
+
 /* ── Regras do ciclo ──────────────────────────────────────────────────────── */
 
 .rules {

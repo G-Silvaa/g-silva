@@ -8,6 +8,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { maestri } from './articles/maestri'
+
 export type Locale = 'pt' | 'en'
 
 /** Texto bilíngue. */
@@ -367,21 +369,49 @@ export const explorations: Exploration[] = []
 
 /* ── Artigos ──────────────────────────────────────────────────────────────── */
 
+/**
+ * Bloco do corpo de um artigo. Nos textos vale uma marcação mínima:
+ * `código`, **negrito**, [texto](/link) e [3] para citar a fonte 3.
+ */
+export type ArticleBlock =
+  | { kind: 'p'; text: string }
+  | { kind: 'h2'; text: string }
+  | { kind: 'list'; items: string[] }
+  | { kind: 'code'; text: string; caption?: string }
+  | { kind: 'figure'; src: string; alt: string; caption: string }
+  | { kind: 'note'; text: string }
+
+export interface ArticleSource {
+  title: string
+  /** Autor ou publicação, e o ano. */
+  by: string
+  url: string
+}
+
 export interface Article {
   slug: string
   title: T
+  /** O título em duas linhas, para o topo da página; `*trecho*` sai apagado. */
+  lines?: { pt: string[]; en: string[] }
   /** Data em ISO (2026-09-10) — usada para ordenar e exibir. */
   date: string
   lead: T
+  tags?: string[]
+  /** Imagem de capa — também vira a prévia em redes sociais. */
+  cover?: string
+  /** O texto completo. Sem ele, o artigo precisa de `href`. */
+  body?: { pt: ArticleBlock[]; en: ArticleBlock[] }
+  /** Referências, citadas no texto como [1], [2]… na ordem desta lista. */
+  sources?: ArticleSource[]
   /** Link externo, se o texto estiver publicado em outro lugar. */
   href?: string
 }
 
 /**
- * Vazio de propósito. Acrescente aqui e a página /articles se preenche
- * sozinha — o estado vazio some assim que houver o primeiro item.
+ * Cada artigo mora no próprio arquivo em `content/articles`. Acrescente aqui e
+ * a página /articles se preenche sozinha; o mais recente aparece primeiro.
  */
-export const articles: Article[] = []
+export const articles: Article[] = [maestri].sort((a, b) => b.date.localeCompare(a.date))
 
 /* ── Página de IA ─────────────────────────────────────────────────────────── */
 
@@ -392,14 +422,82 @@ export const articles: Article[] = []
  */
 export const ai = {
   lines: {
-    pt: ['IA não projeta.', '*Faz os outros 80%*'],
-    en: ['AI does not design.', '*It does the other 80%*'],
+    pt: ['IA como parte do', '*meu fluxo diário.*'],
+    en: ['AI as part of my', '*everyday workflow.*'],
   } as { pt: string[]; en: string[] },
 
   lead: {
-    pt: 'Usando IA em meu fluxo de trabalho diário para execução mais rápida, melhores decisões, prototipagem rápida e envio de produtos do mundo real.',
-    en: 'Using AI across my daily workflow for faster execution, better decisions, rapid prototyping, and shipping real-world products.',
+    pt: 'Uso IA em todo o ciclo de desenvolvimento para entregar mais rápido, pensar com mais profundidade e construir produtos melhores — sem abrir mão do raciocínio de engenharia e do julgamento humano.',
+    en: 'I use AI across the whole development cycle to move faster, think deeper and ship better products — without replacing engineering thinking or human judgment.',
   } as T,
+
+  /** Onde a IA entra no trabalho. Cada item vira um cartão numerado. */
+  uses: [
+    {
+      tag: { pt: 'Automação', en: 'Automation' } as T,
+      title: { pt: 'Automação de tarefas', en: 'Task Automation' } as T,
+      body: {
+        pt: 'Boilerplate, migrações, scripts, documentação e notas de release. A metade repetitiva do trabalho, fora da minha mesa.',
+        en: 'Boilerplate, migrations, scripts, documentation and release notes. The repetitive half of the job, off my plate.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Pesquisa', en: 'Research' } as T,
+      title: { pt: 'Pesquisa técnica', en: 'Technical Research' } as T,
+      body: {
+        pt: 'Comparar bibliotecas, ler documentação nova, levantar padrões de arquitetura — a base, em uma fração do tempo de sempre.',
+        en: 'Comparing libraries, reading new docs, surveying architecture patterns — the groundwork, in a fraction of the usual time.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Análise', en: 'Analysis' } as T,
+      title: { pt: 'Análise e decisão', en: 'Analysis & Decision Making' } as T,
+      body: {
+        pt: 'Quebrar requisitos, mapear fluxos, encontrar casos de borda e questionar premissas antes da primeira linha de código.',
+        en: 'Breaking down requirements, mapping flows, finding edge cases and challenging assumptions before the first line of code.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Desenvolvimento', en: 'Development' } as T,
+      title: { pt: 'Código e desenvolvimento', en: 'Code & Development' } as T,
+      body: {
+        pt: 'Java, Spring Boot, Angular e Next.js — endpoints e componentes prontos para produção, seguindo o padrão do projeto.',
+        en: 'Java, Spring Boot, Angular and Next.js — production-ready endpoints and components that follow the project’s conventions.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Prototipagem', en: 'Prototyping' } as T,
+      title: { pt: 'Prototipagem rápida', en: 'Fast Prototyping' } as T,
+      body: {
+        pt: 'Protótipos funcionais e MVPs enxutos no lugar de telas estáticas — validados antes de investir tempo de engenharia.',
+        en: 'Working prototypes and lean MVPs instead of static mockups — validated before engineering time is spent.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Testes', en: 'Testing' } as T,
+      title: { pt: 'Testes e validação', en: 'Testing & Validation' } as T,
+      body: {
+        pt: 'Testes unitários e E2E, revisão de acessibilidade, code review e QA — antes que o problema chegue ao usuário.',
+        en: 'Unit and E2E tests, accessibility reviews, code review and QA — before issues reach users.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Agentes', en: 'Agents' } as T,
+      title: { pt: 'MCPs e agentes de IA', en: 'MCPs & AI Agents' } as T,
+      body: {
+        pt: 'Claude, GitHub e servidores MCP no mesmo ciclo, compartilhando contexto em vez de trabalhar isolados.',
+        en: 'Claude, GitHub and MCP servers in one loop, sharing context instead of working in isolation.',
+      } as T,
+    },
+    {
+      tag: { pt: 'Produtos', en: 'Apps' } as T,
+      title: { pt: 'Apps e produtos', en: 'Apps & Products' } as T,
+      body: {
+        pt: 'Ferramentas internas e produtos completos colocados no ar com IA no fluxo — este portfólio incluído.',
+        en: 'Internal tools and complete products shipped with AI in the loop — this portfolio included.',
+      } as T,
+    },
+  ],
 
   /** As colunas da esteira. Cada coluna vira um grupo de cartões. */
   pipeline: [

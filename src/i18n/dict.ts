@@ -115,6 +115,14 @@ export const ui = {
   hi: { pt: 'Oi!', en: 'Hi!' },
 
   /* Página de IA */
+  aiUsesTab: { pt: 'Onde entra', en: 'Where it fits' },
+  aiUsesA: { pt: 'Oito frentes,', en: 'Eight fronts,' },
+  aiUsesB: { pt: 'um só fluxo.', en: 'one workflow.' },
+  aiUsesLead: {
+    pt: 'Onde a IA acelera o trabalho de ponta a ponta — da pesquisa ao deploy. A decisão final continua sendo minha.',
+    en: 'Where AI speeds up the work end to end — from research to deploy. The final call is still mine.',
+  },
+  aiSeeUses: { pt: 'Como eu uso', en: 'How I use it' },
   aiLoopTab: { pt: 'O ciclo', en: 'The loop' },
   aiLoopA: { pt: 'Como isso entra', en: 'How it fits' },
   aiLoopB: { pt: 'no meu dia.', en: 'into my day.' },
@@ -136,6 +144,11 @@ export const ui = {
   aiSeeBuilt: { pt: 'O que saiu disso', en: 'What came out of it' },
 
   /* Artigos */
+  readArticle: { pt: 'Ler artigo', en: 'Read article' },
+  articleTab: { pt: 'Artigo', en: 'Article' },
+  minRead: { pt: 'min de leitura', en: 'min read' },
+  sources: { pt: 'Fontes', en: 'Sources' },
+  articleSeeAi: { pt: 'Como uso IA', en: 'How I use AI' },
   articlesA: { pt: 'Notas sobre', en: 'Notes on' },
   articlesB: { pt: 'o que construo.', en: 'what I build.' },
   articlesLead: {

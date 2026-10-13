@@ -8,7 +8,7 @@ import { articles } from '@/content/site'
 import { useLang } from '@/i18n/LangProvider'
 
 export default function ArticlesView() {
-  const { t, tr } = useLang()
+  const { lang, t, tr } = useLang()
 
   return (
     <>
@@ -55,7 +55,7 @@ export default function ArticlesView() {
                     <span>
                       <span className="nm">{tr(article.title)}</span>
                       <span className="kd">
-                        {new Date(article.date).toLocaleDateString('pt-BR', {
+                        {new Date(`${article.date}T12:00:00`).toLocaleDateString(lang === 'pt' ? 'pt-BR' : 'en-US', {
                           day: '2-digit',
                           month: 'long',
                           year: 'numeric',
@@ -68,7 +68,7 @@ export default function ArticlesView() {
                       </span>
                     </span>
                     <span className="open">
-                      {t('viewCase')}
+                      {t('readArticle')}
                       <ArrowUR />
                     </span>
                   </>
@@ -84,9 +84,9 @@ export default function ArticlesView() {
                     {inner}
                   </a>
                 ) : (
-                  <div key={article.slug} className="work-row">
+                  <Link key={article.slug} className="work-row" href={`/articles/${article.slug}`}>
                     {inner}
-                  </div>
+                  </Link>
                 )
               })}
             </div>

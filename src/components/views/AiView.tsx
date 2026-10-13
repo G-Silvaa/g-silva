@@ -21,12 +21,12 @@ export default function AiView() {
           <div>
             <p className="lead">{tr(ai.lead)}</p>
             <div style={{ display: 'flex', gap: 12, marginTop: 26, flexWrap: 'wrap' }}>
-              <a href="#ciclo" className="btn btn--amber">
-                {t('aiSeeLoop')}
+              <a href="#uso" className="btn btn--amber">
+                {t('aiSeeUses')}
                 <ArrowUR />
               </a>
-              <a href="#feito" className="btn">
-                {t('aiSeeBuilt')}
+              <a href="#ciclo" className="btn">
+                {t('aiSeeLoop')}
                 <ArrowUR />
               </a>
             </div>
@@ -35,6 +35,38 @@ export default function AiView() {
       </section>
 
       <Pipeline columns={ai.pipeline} />
+
+      {/* ── Onde entra ────────────────────────────────────────────────── */}
+      <section className="sec" id="uso">
+        <span className="tab">{t('aiUsesTab')}</span>
+        <span className="corner" aria-hidden="true" />
+
+        <div className="pad" style={{ paddingTop: 22 }}>
+          <Reveal>
+            <div className="sec-top">
+              <h2 className="h2">
+                <TwoTone lines={[t('aiUsesA'), `*${t('aiUsesB')}*`]} />
+              </h2>
+              <p className="lead">{t('aiUsesLead')}</p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={60}>
+            <ol className="uses">
+              {ai.uses.map((use, i) => (
+                <li className="use" key={use.title.en}>
+                  <div className="use-top">
+                    <span className="no">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="tg">{tr(use.tag)}</span>
+                  </div>
+                  <h3 className="h4">{tr(use.title)}</h3>
+                  <p>{tr(use.body)}</p>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── O ciclo ───────────────────────────────────────────────────── */}
       <section className="sec" id="ciclo">
