@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { Fragment, type ReactNode } from 'react'
+import ArticleDiagram from '@/components/ArticleDiagrams'
+import { highlight, langFromFile } from '@/components/highlight'
 import { ArrowUR } from '@/components/Icons'
-import Reveal from '@/components/Reveal'
 import TwoTone from '@/components/TwoTone'
-import { articles, type ArticleBlock } from '@/content/site'
+import { articles, type ArticleBlock, type Locale } from '@/content/site'
 import { useLang } from '@/i18n/LangProvider'
 
 /**
@@ -38,10 +39,24 @@ function inline(text: string): ReactNode {
   })
 }
 
-function Block({ block, fig }: { block: ArticleBlock; fig: number }) {
+/** Âncora do título: "2. Componentização" vira "2-componentizacao". */
+function slugify(text: string) {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+function Block({ block, fig, lang }: { block: ArticleBlock; fig: number; lang: Locale }) {
   switch (block.kind) {
     case 'h2':
-      return <h2 className="h3">{block.text}</h2>
+      return (
+        <h2 className="h3" id={slugify(block.text)}>
+          {block.text}
+        </h2>
+      )
     case 'p':
       return <p>{inline(block.text)}</p>
     case 'list':
@@ -55,8 +70,9 @@ function Block({ block, fig }: { block: ArticleBlock; fig: number }) {
     case 'code':
       return (
         <figure>
+          {block.file ? <div className="prose-file">{block.file}</div> : null}
           <pre>
-            <code>{block.text}</code>
+            <code>{highlight(block.text, block.lang ?? langFromFile(block.file))}</code>
           </pre>
           {block.caption ? <figcaption>{block.caption}</figcaption> : null}
         </figure>
@@ -73,6 +89,17 @@ function Block({ block, fig }: { block: ArticleBlock; fig: number }) {
           </figcaption>
         </figure>
       )
+    case 'diagram':
+      return (
+        <figure className="prose-fig">
+          <div className="prose-shot prose-diagram">
+            <ArticleDiagram name={block.name} lang={lang} />
+          </div>
+          <figcaption>
+            Fig. {String(fig).padStart(3, '0')} — {block.caption}
+          </figcaption>
+        </figure>
+      )
     case 'note':
       return <aside className="prose-note">{inline(block.text)}</aside>
   }
@@ -81,7 +108,7 @@ function Block({ block, fig }: { block: ArticleBlock; fig: number }) {
 /** Cerca de 220 palavras por minuto, arredondado para cima. */
 function readingTime(blocks: ArticleBlock[]) {
   const words = blocks
-    .flatMap((b) => (b.kind === 'list' ? b.items : 'text' in b ? [b.text] : []))
+    .flatMap((b) => (b.kind === 'list' ? b.items : b.kind === 'code' || !('text' in b) ? [] : [b.text]))
     .join(' ')
     .split(/\s+/).length
   return Math.max(1, Math.ceil(words / 220))
@@ -139,31 +166,36 @@ export default function ArticleView({ slug }: { slug: string }) {
         <span className="corner" aria-hidden="true" />
 
         <div className="pad" style={{ paddingTop: 22 }}>
-          <Reveal>
-            <article className="prose">
-              {blocks.map((block, i) => (
-                <Block key={i} block={block} fig={block.kind === 'figure' ? ++fig : fig} />
-              ))}
+          {/* Sem Reveal aqui: o texto é longo demais para o limiar de 8% e
+              nunca apareceria numa tela de celular. */}
+          <article className="prose">
+            {blocks.map((block, i) => (
+              <Block
+                key={i}
+                block={block}
+                lang={lang}
+                fig={block.kind === 'figure' || block.kind === 'diagram' ? ++fig : fig}
+              />
+            ))}
 
-              {article.sources?.length ? (
-                <section className="prose-sources" aria-labelledby="fontes">
-                  <h2 className="micro" id="fontes">
-                    {t('sources')}
-                  </h2>
-                  <ol>
-                    {article.sources.map((source, i) => (
-                      <li key={source.url} id={`fonte-${i + 1}`}>
-                        <a href={source.url} target="_blank" rel="noreferrer noopener">
-                          {source.title}
-                        </a>
-                        <span> — {source.by}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </section>
-              ) : null}
-            </article>
-          </Reveal>
+            {article.sources?.length ? (
+              <section className="prose-sources" aria-labelledby="fontes">
+                <h2 className="micro" id="fontes">
+                  {t('sources')}
+                </h2>
+                <ol>
+                  {article.sources.map((source, i) => (
+                    <li key={source.url} id={`fonte-${i + 1}`}>
+                      <a href={source.url} target="_blank" rel="noreferrer noopener">
+                        {source.title}
+                      </a>
+                      <span> — {typeof source.by === 'string' ? source.by : tr(source.by)}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ) : null}
+          </article>
         </div>
       </section>
 

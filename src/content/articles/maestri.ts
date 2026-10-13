@@ -34,7 +34,7 @@ export const maestri: Article = {
     },
     {
       title: 'Best practices for Claude Code',
-      by: 'Anthropic, documentação do Claude Code',
+      by: { pt: 'Anthropic, documentação do Claude Code', en: 'Anthropic, Claude Code docs' },
       url: 'https://code.claude.com/docs/en/best-practices',
     },
     {
@@ -44,7 +44,7 @@ export const maestri: Article = {
     },
     {
       title: 'Maestri',
-      by: 'Site oficial',
+      by: { pt: 'Site oficial', en: 'Official site' },
       url: 'https://themaestri.app',
     },
     {
@@ -59,7 +59,7 @@ export const maestri: Article = {
     },
     {
       title: 'LLM Evaluators Recognize and Favor Their Own Generations',
-      by: 'Panickssery, Bowman e Feng, NeurIPS 2024',
+      by: { pt: 'Panickssery, Bowman e Feng, NeurIPS 2024', en: 'Panickssery, Bowman and Feng, NeurIPS 2024' },
       url: 'https://papers.nips.cc/paper_files/paper/2024/hash/7f1f0218e45f5414c79c0679633e47bc-Abstract-Conference.html',
     },
     {

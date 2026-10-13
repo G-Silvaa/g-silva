@@ -8,6 +8,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { angularNext } from './articles/angular-next'
 import { maestri } from './articles/maestri'
 
 export type Locale = 'pt' | 'en'
@@ -377,14 +378,19 @@ export type ArticleBlock =
   | { kind: 'p'; text: string }
   | { kind: 'h2'; text: string }
   | { kind: 'list'; items: string[] }
-  | { kind: 'code'; text: string; caption?: string }
+  /** `lang` liga o realce de sintaxe; sem ele, sai do final de `file` (.ts, .tsx, .html). */
+  | { kind: 'code'; text: string; caption?: string; file?: string; lang?: 'ts' | 'tsx' | 'html' | 'tree' }
+  /** Diagrama desenhado em SVG, pelo nome em `ArticleDiagrams`. */
+  | { kind: 'diagram'; name: DiagramName; caption: string }
   | { kind: 'figure'; src: string; alt: string; caption: string }
   | { kind: 'note'; text: string }
 
+export type DiagramName = 'ng-next-caixa' | 'ng-next-fronteira'
+
 export interface ArticleSource {
   title: string
-  /** Autor ou publicação, e o ano. */
-  by: string
+  /** Autor ou publicação, e o ano — bilíngue quando a descrição muda com o idioma. */
+  by: string | T
   url: string
 }
 
@@ -411,7 +417,7 @@ export interface Article {
  * Cada artigo mora no próprio arquivo em `content/articles`. Acrescente aqui e
  * a página /articles se preenche sozinha; o mais recente aparece primeiro.
  */
-export const articles: Article[] = [maestri].sort((a, b) => b.date.localeCompare(a.date))
+export const articles: Article[] = [maestri, angularNext].sort((a, b) => b.date.localeCompare(a.date))
 
 /* ── Página de IA ─────────────────────────────────────────────────────────── */
 

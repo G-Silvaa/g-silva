@@ -46,6 +46,17 @@
   --term-dim: #8a8471;
   --term-ok: #8fbf6a;
 
+  /* Realce de sintaxe: o bloco de código é escuro nos dois temas, então a
+     paleta é uma só. */
+  --code-kw: #f3b44a;
+  --code-str: #9cc87a;
+  --code-com: #8a8471;
+  --code-type: #c9a8e8;
+  --code-fn: #7fc8c0;
+  --code-tag: #7fb4e0;
+  --code-num: #ec9a6e;
+  --code-dec: #ec9a6e;
+
   --sans: var(--f-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
@@ -1450,6 +1461,7 @@ h4 {
   margin-top: 1.15em;
 }
 .prose h2.h3 {
+  scroll-margin-top: calc(var(--nav-h) + 24px);
   color: var(--ink);
   line-height: 1.15;
   margin-top: 2.2em;
@@ -1541,6 +1553,59 @@ h4 {
   max-width: 100%;
   max-height: 620px;
   margin-inline: auto;
+}
+/* Os diagramas rolam de lado no celular em vez de encolher até ficarem ilegíveis. */
+.prose-diagram {
+  overflow-x: auto;
+}
+.prose-diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+}
+.tk-kw,
+.tk-ctrl {
+  color: var(--code-kw);
+}
+.tk-str {
+  color: var(--code-str);
+}
+.tk-com {
+  color: var(--code-com);
+  font-style: italic;
+}
+.tk-type,
+.tk-attr {
+  color: var(--code-type);
+}
+.tk-fn,
+.tk-interp {
+  color: var(--code-fn);
+}
+.tk-tag {
+  color: var(--code-tag);
+}
+.tk-num,
+.tk-dec {
+  color: var(--code-num);
+}
+.tk-dim {
+  color: var(--code-com);
+}
+/* Nome do arquivo numa aba presa ao topo do bloco de código. */
+.prose-file {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--term);
+  color: var(--term-dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+}
+.prose-file + pre {
+  margin-top: 0;
 }
 .prose-note {
   padding: 16px 20px;
